@@ -110,6 +110,8 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
 .btn-pkg-unavail:hover{background:rgba(248,113,113,.08);}
 .btn-pkg-hide{background:none;border:1px solid rgba(251,191,36,.3);color:#f59e0b;padding:5px 13px;border-radius:7px;font-size:.75rem;cursor:pointer;font-family:inherit;}
 .btn-pkg-hide:hover{background:rgba(251,191,36,.08);}
+.btn-pkg-remove{background:none;border:1px solid rgba(248,113,113,.35);color:var(--red);padding:5px 13px;border-radius:7px;font-size:.75rem;cursor:pointer;font-family:inherit;}
+.btn-pkg-remove:hover{background:rgba(248,113,113,.08);}
 /* ADDONS */
 .addon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.75rem;}
 .addon-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.9rem;}
@@ -319,8 +321,9 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
                   </tbody>
                 </table>
                 <div class="pkg-actions">
-                  <button class="btn-pkg-unavail" onclick="setPkgStatus('kids','unavailable')">🔴 Mark Unavailable</button>
-                  <button class="btn-pkg-hide" onclick="setPkgStatus('kids','hidden')">⏸ Hide from Site</button>
+                  <button class="btn-pkg-unavail" onclick="setPkgStatus('kids','unavailable')">🔴 Unavailable</button>
+                  <button class="btn-pkg-hide" onclick="setPkgStatus('kids','hidden')">⏸ Hide</button>
+                  <button class="btn-pkg-remove" onclick="removePackage('kids','Kids Birthday')">🗑 Remove</button>
                 </div>
               </div>
             </div>
@@ -366,8 +369,9 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
                   </tbody>
                 </table>
                 <div class="pkg-actions">
-                  <button class="btn-pkg-unavail" onclick="setPkgStatus('teens','unavailable')">🔴 Mark Unavailable</button>
-                  <button class="btn-pkg-hide" onclick="setPkgStatus('teens','hidden')">⏸ Hide from Site</button>
+                  <button class="btn-pkg-unavail" onclick="setPkgStatus('teens','unavailable')">🔴 Unavailable</button>
+                  <button class="btn-pkg-hide" onclick="setPkgStatus('teens','hidden')">⏸ Hide</button>
+                  <button class="btn-pkg-remove" onclick="removePackage('teens','Teen Birthday')">🗑 Remove</button>
                 </div>
               </div>
             </div>
@@ -398,8 +402,9 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
                   </tbody>
                 </table>
                 <div class="pkg-actions">
-                  <button class="btn-pkg-unavail" onclick="setPkgStatus('highfly','unavailable')">🔴 Mark Unavailable</button>
-                  <button class="btn-pkg-hide" onclick="setPkgStatus('highfly','hidden')">⏸ Hide from Site</button>
+                  <button class="btn-pkg-unavail" onclick="setPkgStatus('highfly','unavailable')">🔴 Unavailable</button>
+                  <button class="btn-pkg-hide" onclick="setPkgStatus('highfly','hidden')">⏸ Hide</button>
+                  <button class="btn-pkg-remove" onclick="removePackage('highfly','HighFly Upgrade')">🗑 Remove</button>
                 </div>
               </div>
             </div>
@@ -423,6 +428,28 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
             </div>
           </div>
 
+
+          <div class="pkg-section" style="margin-top:.5rem;">
+            <div class="pkg-section-title">➕ Custom Package</div>
+            <div id="add-pkg-form" style="display:none;background:var(--card);border:1px dashed rgba(240,44,184,.35);border-radius:12px;padding:1rem;margin-bottom:.8rem;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;">
+                <div class="field"><label>Package Name</label><input type="text" id="np-name" placeholder="e.g. Group Session"/></div>
+                <div class="field"><label>Age / Tag</label><input type="text" id="np-tag" placeholder="e.g. All ages"/></div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;">
+                <div class="field"><label>Price (€)</label><input type="number" id="np-price" step="0.01" min="0" placeholder="0.00"/></div>
+                <div class="field"><label>Price Unit</label><input type="text" id="np-unit" placeholder="e.g. per person"/></div>
+              </div>
+              <div style="display:flex;gap:.5rem;margin-top:.4rem;">
+                <button class="btn-pink lf-ov-btn" style="width:auto;padding:8px 20px;font-family:inherit;border-radius:9px;font-size:.85rem;font-weight:700;border:none;cursor:pointer;background:var(--pink);color:#fff;" onclick="addCustomPackage()">Add Package</button>
+                <button class="btn-secondary lf-ov-btn" style="cursor:pointer;" onclick="document.getElementById('add-pkg-form').style.display='none';document.getElementById('btn-add-pkg').style.display=''">Cancel</button>
+              </div>
+              <div class="msg" id="np-msg"></div>
+            </div>
+            <button class="btn-secondary lf-ov-btn" id="btn-add-pkg" style="cursor:pointer;" onclick="document.getElementById('add-pkg-form').style.display='block';this.style.display='none'">+ Add New Package</button>
+            <div id="custom-pkg-list" style="margin-top:.6rem;"></div>
+          </div>
+
         </div><!-- /panel-packages -->
 
         <!-- COLORS & FONTS -->
@@ -430,6 +457,13 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
           <div class="sh">Brand Colors</div>
           <div class="color-note">⚠️ Color changes apply to new page loads via CSS variables. The Luxfly site uses <code>--pink</code>, <code>--bg-main</code>, and <code>--dark-accent</code>. Make sure those variables are defined in each page's CSS before saving.</div>
           <div class="color-grid" id="color-grid" style="margin-top:.9rem;"></div>
+
+          <div class="sh" style="margin-top:1.6rem;">Live Preview</div>
+          <div style="position:relative;border:1px solid var(--border);border-radius:10px;overflow:hidden;height:220px;margin-bottom:.5rem;">
+            <iframe id="color-preview-frame" src="index.html" style="width:200%;height:440px;border:none;transform:scale(0.5);transform-origin:top left;pointer-events:none;" title="Color Preview"></iframe>
+            <div style="position:absolute;bottom:8px;right:10px;font-size:.65rem;color:var(--muted);">Live preview — updates on save</div>
+          </div>
+          <button class="btn-secondary lf-ov-btn" style="font-size:.75rem;padding:5px 12px;margin-bottom:1rem;cursor:pointer;" onclick="refreshColorPreview()">↺ Refresh Preview</button>
           <div class="sh" style="margin-top:1.8rem;">Typography</div>
           <div style="max-width:440px;">
             <div class="field">
@@ -628,6 +662,7 @@ document.getElementById('pwd-input').addEventListener('keydown',e=>{if(e.key==='
 async function loadContent(){
   try{const r=await fetch(WORKER+'/content');if(r.ok)kvContent=await r.json()||{};}catch(e){kvContent={};}
   populatePricing();buildColors();
+  if(kvContent.custom_packages_json){try{customPackages=JSON.parse(kvContent.custom_packages_json);}catch(e){}renderCustomPackages();}
   document.querySelectorAll('[data-key]').forEach(el=>{const k=el.dataset.key;if(k&&kvContent[k]!==undefined)el.value=kvContent[k];});
 }
 function populatePricing(){
@@ -693,7 +728,7 @@ function injectEditMode(doc){
   const style=doc.createElement('style');
   style.id='lf-edit-style';
   style.textContent=`
-    *:not(#lf-badge):hover{outline:1px dashed rgba(240,44,184,.5)!important;}
+    *:not(#lf-badge):hover{outline:1px dashed rgba(240,44,184,.5)!important;} a[href]{pointer-events:none!important;cursor:text!important;} button:not(.lf-ov-btn){pointer-events:none!important;cursor:text!important;}
     img{cursor:pointer!important;}
     #lf-badge{position:fixed;top:0;left:50%;transform:translateX(-50%);background:rgba(240,44,184,.97);color:#fff;font-size:11px;font-weight:800;letter-spacing:1.5px;padding:4px 16px;border-radius:0 0 10px 10px;z-index:999999;pointer-events:none;font-family:system-ui,sans-serif;box-shadow:0 2px 12px rgba(0,0,0,.4);}
   `;
@@ -721,15 +756,8 @@ function injectEditMode(doc){
     });
   });
   window._lfObserver.observe(doc.body,{characterData:true,subtree:true});
-  doc.addEventListener('mousedown',function lfImg(e){
-    if(e.target&&e.target.tagName==='IMG'){e.preventDefault();openImgDialog(e.target);}
-  },true);
-  doc.querySelectorAll('img').forEach(img=>{
-    img.style.cursor='pointer';img.style.transition='outline .15s';
-    img.addEventListener('mouseenter',()=>{img.style.outline='3px solid rgba(240,44,184,.85)';img.style.outlineOffset='2px';});
-    img.addEventListener('mouseleave',()=>{img.style.outline='';img.style.outlineOffset='';});
-  });
   injectFormOverlays(doc);
+  injectImgOverlays(doc);
 }
 function injectFormOverlays(doc){
   doc.querySelectorAll('.lf-fcap').forEach(e=>e.remove());
@@ -742,6 +770,20 @@ function injectFormOverlays(doc){
     cap.addEventListener('mouseleave',()=>{cap.style.outline='1px dashed rgba(240,44,184,.45)';cap.style.background='';});
     cap.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();openFormEditor(el,doc);});
     doc.body.appendChild(cap);
+  });
+}
+function injectImgOverlays(doc){
+  doc.querySelectorAll('.lf-iov').forEach(e=>e.remove());
+  doc.querySelectorAll('img').forEach(img=>{
+    if(!img.offsetWidth&&!img.offsetHeight)return;
+    let top=0,left=0,node=img;
+    do{top+=node.offsetTop||0;left+=node.offsetLeft||0;node=node.offsetParent;}while(node&&node!==doc.body);
+    const ov=doc.createElement('div');ov.className='lf-iov lf-ov-btn';
+    ov.style.cssText='position:absolute;z-index:99998;cursor:pointer;top:'+top+'px;left:'+left+'px;width:'+img.offsetWidth+'px;height:'+img.offsetHeight+'px;box-sizing:border-box;transition:outline .12s,background .12s;';
+    ov.addEventListener('mouseenter',()=>{ov.style.outline='3px solid rgba(240,44,184,.85)';ov.style.background='rgba(240,44,184,.06)';});
+    ov.addEventListener('mouseleave',()=>{ov.style.outline='';ov.style.background='';});
+    ov.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();openImgDialog(img);});
+    doc.body.appendChild(ov);
   });
 }
 function findKvKey(el,doc){
@@ -895,6 +937,74 @@ document.querySelectorAll('.tier-table input,.addon-price-row input').forEach(in
 });
 
 // ─── COLORS ────────────────────────────────────────────────────────
+function removePackage(id,label){
+  if(!confirm('Remove "'+label+'" package? It will be hidden from the site. This action saves immediately.'))return;
+  pendingChanges['pkg_'+id+'_status']='removed';updateDirty();
+  const card=document.getElementById('pkgcard-'+id);if(card){card.style.opacity='.3';card.style.pointerEvents='none';}
+}
+let customPackages=[];
+function escH(s){return(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+function addCustomPackage(){
+  const name=document.getElementById('np-name').value.trim();
+  const tag=document.getElementById('np-tag').value.trim();
+  const price=document.getElementById('np-price').value;
+  const unit=document.getElementById('np-unit').value.trim();
+  const msg=document.getElementById('np-msg');
+  if(!name||!price){msg.textContent='Name and price required.';msg.className='msg err';return;}
+  const id='cpkg'+Date.now();
+  customPackages.push({id,name,tag,price,unit});
+  pendingChanges['custom_packages_json']=JSON.stringify(customPackages);
+  updateDirty();renderCustomPackages();
+  ['np-name','np-tag','np-price','np-unit'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
+  document.getElementById('add-pkg-form').style.display='none';
+  document.getElementById('btn-add-pkg').style.display='';
+  msg.textContent='';
+}
+function renderCustomPackages(){
+  const list=document.getElementById('custom-pkg-list');if(!list)return;
+  list.innerHTML=customPackages.map(p=>`
+    <div class="pkg-card open" id="pkgcard-${p.id}" style="margin-top:.5rem;">
+      <div class="pkg-card-head" onclick="togglePkgCard('${p.id}')">
+        <div><div class="pkg-card-name">${escH(p.name)}</div><div style="font-size:.72rem;color:var(--muted);margin-top:2px;">${escH(p.tag)}</div></div>
+        <div style="display:flex;align-items:center;gap:.6rem;"><span class="pkg-card-tag">Custom</span><span class="pkg-card-chevron">▲</span></div>
+      </div>
+      <div class="pkg-card-body">
+        <table class="tier-table"><thead><tr><th>Item</th><th>Price (€)</th><th>Unit</th></tr></thead>
+        <tbody><tr>
+          <td style="font-size:.8rem;color:var(--muted);">${escH(p.name)}</td>
+          <td><input type="number" id="cpprice_${p.id}" value="${p.price}" step="0.01" min="0" oninput="updateCustomPkg('${p.id}',this.value)"/></td>
+          <td style="font-size:.75rem;color:var(--muted);">${escH(p.unit)}</td>
+        </tr></tbody></table>
+        <div class="pkg-actions">
+          <button class="btn-pkg-hide lf-ov-btn" onclick="setPkgStatus('${p.id}','hidden')">⏸ Hide</button>
+          <button class="btn-pkg-remove lf-ov-btn" onclick="removeCustomPkg('${p.id}','${escH(p.name)}')">🗑 Remove</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function updateCustomPkg(id,val){
+  const p=customPackages.find(x=>x.id===id);if(p){p.price=val;pendingChanges['custom_packages_json']=JSON.stringify(customPackages);updateDirty();}
+}
+function removeCustomPkg(id,name){
+  if(!confirm('Remove "'+name+'"?'))return;
+  customPackages=customPackages.filter(p=>p.id!==id);
+  pendingChanges['custom_packages_json']=JSON.stringify(customPackages);updateDirty();renderCustomPackages();
+}
+function refreshColorPreview(){
+  const f=document.getElementById('color-preview-frame');if(!f)return;
+  f.src=f.src;
+}
+const COLOR_VAR_MAP={clr_primary:'--pink',clr_bg:'--bg-main',clr_accent:'--dark-accent',clr_text:'--text-color',clr_muted:'--muted-color',clr_gradient:'--gradient-start'};
+function pushColorToPreview(key,val){
+  const f=document.getElementById('color-preview-frame');if(!f||!f.contentDocument)return;
+  const cssVar=COLOR_VAR_MAP[key];if(!cssVar)return;
+  try{
+    let st=f.contentDocument.getElementById('admin-preview-style');
+    if(!st){st=f.contentDocument.createElement('style');st.id='admin-preview-style';f.contentDocument.head.appendChild(st);}
+    const vars=Object.entries(pendingChanges).filter(([k])=>COLOR_VAR_MAP[k]).map(([k,v])=>COLOR_VAR_MAP[k]+':'+v+';').join('');
+    st.textContent=':root{'+vars+'}';
+  }catch(e){}
+}
 function buildColors(){
   const grid=document.getElementById('color-grid');if(!grid)return;
   grid.innerHTML=COLORS.map(c=>{
@@ -911,17 +1021,17 @@ function buildColors(){
 }
 function syncHex(key,val){
   const hex=document.getElementById('hex_'+key);if(hex)hex.value=val;
-  pendingChanges[key]=val;updateDirty();
+  pendingChanges[key]=val;updateDirty();pushColorToPreview(key,val);
 }
 function syncSwatch(key,val){
   if(!/^#[0-9a-f]{6}$/i.test(val))return;
   const sw=document.getElementById('sw_'+key);if(sw)sw.value=val;
-  pendingChanges[key]=val;updateDirty();
+  pendingChanges[key]=val;updateDirty();pushColorToPreview(key,val);
 }
 function resetColor(key,def){
   const sw=document.getElementById('sw_'+key);const hex=document.getElementById('hex_'+key);
   if(sw)sw.value=def;if(hex)hex.value=def;
-  pendingChanges[key]=def;updateDirty();
+  pendingChanges[key]=def;updateDirty();pushColorToPreview(key,def);
 }
 
 // ─── PASSWORD & USERS ──────────────────────────────────────────────

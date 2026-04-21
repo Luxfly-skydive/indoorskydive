@@ -772,9 +772,12 @@
   }
 
   // ─── Send ────────────────────────────────────────────────────────────────────
+  let lastSent = 0;
   function sendMessage(text) {
+    if (Date.now() - lastSent < 1000) return;
     text = text.trim();
     if (!text) return;
+    lastSent = Date.now();
     toggleQuickBtns(false);
     addMsg(text, 'user');
     input.value = '';

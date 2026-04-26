@@ -100,6 +100,23 @@
         });
       }
 
+      // WYSIWYG image overrides — apply with fade-in to prevent flash of old image
+      const pg = (location.pathname.split('/').pop() || 'index.html').replace('.html','').replace(/-/g,'_');
+      const wImgKey = '_wysiwyg_' + pg + '_imgs';
+      if (data[wImgKey]) {
+        try {
+          const imgOverrides = JSON.parse(data[wImgKey]);
+          Object.entries(imgOverrides).forEach(([sel, src]) => {
+            try { document.querySelectorAll(sel).forEach(el => {
+              el.style.opacity = '0';
+              el.style.transition = 'opacity 0.15s ease';
+              el.src = src;
+              el.addEventListener('load', () => { el.style.opacity = '1'; }, { once: true });
+            }); } catch(e) {}
+          });
+        } catch(e) {}
+      }
+
     })
     .catch(() => { /* Silently fail — never break the live site */ });
 

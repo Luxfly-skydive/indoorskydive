@@ -9,7 +9,7 @@
     return text
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
       .replace(/\*(.*?)\*/g, '<em>$1</em>')
-      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color:#f02cb8">$1</a>')
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color:#FF4FA3">$1</a>')
       .replace(/\n\n/g, '</p><p>')
       .replace(/\n/g, '<br>');
   }
@@ -18,17 +18,17 @@
     #lf-chat-btn {
       position: fixed; bottom: 28px; right: 28px; z-index: 9999;
       width: 60px; height: 60px; border-radius: 50%;
-      background: #f02cb8; border: none; cursor: pointer;
-      box-shadow: 0 4px 24px rgba(240,44,184,0.45);
+      background: #FF4FA3; border: none; cursor: pointer;
+      box-shadow: 0 4px 24px rgba(255,79,163,0.45);
       display: flex; align-items: center; justify-content: center;
       transition: transform 0.2s, box-shadow 0.2s; outline: none;
     }
-    #lf-chat-btn:hover { transform: scale(1.08); box-shadow: 0 6px 32px rgba(240,44,184,0.6); }
+    #lf-chat-btn:hover { transform: scale(1.08); box-shadow: 0 6px 32px rgba(255,79,163,0.6); }
     #lf-chat-btn svg { pointer-events: none; }
     #lf-chat-badge {
       position: absolute; top: -4px; right: -4px; width: 18px; height: 18px;
       background: #fff; border-radius: 50%; display: flex; align-items: center;
-      justify-content: center; font-size: 11px; font-weight: 700; color: #f02cb8;
+      justify-content: center; font-size: 11px; font-weight: 700; color: #FF4FA3;
     }
     #lf-chat-window {
       position: fixed; bottom: 100px; right: 28px; z-index: 9998;
@@ -46,7 +46,7 @@
       padding: 14px 16px; display: flex; align-items: center; gap: 10px; flex-shrink: 0;
     }
     #lf-chat-header-avatar {
-      width: 36px; height: 36px; border-radius: 50%; background: #f02cb8;
+      width: 36px; height: 36px; border-radius: 50%; background: #FF4FA3;
       display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
     }
     #lf-chat-header-info { flex: 1; }
@@ -78,7 +78,7 @@
     }
     .lf-msg-bot p { margin: 0 0 6px; }
     .lf-msg-bot p:last-child { margin-bottom: 0; }
-    .lf-msg-user { background: #f02cb8; color: #fff; border-bottom-right-radius: 3px; align-self: flex-end; }
+    .lf-msg-user { background: #FF4FA3; color: #fff; border-bottom-right-radius: 3px; align-self: flex-end; }
     .lf-msg-typing { display: flex; align-items: center; gap: 4px; padding: 12px 14px; }
     .lf-dot { width: 7px; height: 7px; background: rgba(255,255,255,0.4); border-radius: 50%; animation: lf-bounce 1.2s infinite; }
     .lf-dot:nth-child(2) { animation-delay: 0.2s; }
@@ -86,11 +86,11 @@
     @keyframes lf-bounce { 0%,60%,100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-5px); opacity: 1; } }
     #lf-chat-quick { padding: 8px 14px 4px; display: flex; flex-wrap: wrap; gap: 6px; flex-shrink: 0; }
     .lf-quick-btn {
-      background: rgba(240,44,184,0.1); border: 1px solid rgba(240,44,184,0.3);
-      border-radius: 20px; color: #f02cb8; font-size: 12px; font-family: 'Inter',sans-serif;
+      background: rgba(255,79,163,0.1); border: 1px solid rgba(255,79,163,0.3);
+      border-radius: 20px; color: #FF4FA3; font-size: 12px; font-family: 'Inter',sans-serif;
       padding: 5px 11px; cursor: pointer; transition: background 0.2s; white-space: nowrap;
     }
-    .lf-quick-btn:hover { background: rgba(240,44,184,0.2); }
+    .lf-quick-btn:hover { background: rgba(255,79,163,0.2); }
     #lf-chat-form {
       padding: 10px 12px 12px; display: flex; gap: 8px;
       border-top: 1px solid rgba(255,255,255,0.07); flex-shrink: 0;
@@ -102,9 +102,9 @@
       max-height: 80px; transition: border-color 0.2s;
     }
     #lf-chat-input::placeholder { color: rgba(255,255,255,0.3); font-size: 14px; }
-    #lf-chat-input:focus { border-color: rgba(240,44,184,0.5); }
+    #lf-chat-input:focus { border-color: rgba(255,79,163,0.5); }
     #lf-chat-send {
-      width: 38px; height: 38px; border-radius: 10px; background: #f02cb8; border: none;
+      width: 38px; height: 38px; border-radius: 10px; background: #FF4FA3; border: none;
       cursor: pointer; display: flex; align-items: center; justify-content: center;
       flex-shrink: 0; align-self: flex-end; transition: opacity 0.2s, transform 0.15s;
     }
@@ -120,11 +120,11 @@
     }
     #lf-chat-bubble {
       position: fixed; bottom: 96px; right: 16px; z-index: 9998;
-      background: #f02cb8; color: #fff;
+      background: #FF4FA3; color: #fff;
       padding: 9px 15px; border-radius: 18px 18px 4px 18px;
       font-size: 13px; font-weight: 600; line-height: 1.3;
       font-family: 'Montserrat','Inter',sans-serif;
-      box-shadow: 0 4px 20px rgba(240,44,184,0.45);
+      box-shadow: 0 4px 20px rgba(255,79,163,0.45);
       white-space: nowrap; cursor: pointer;
       animation: lf-bubble-in 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards;
       -webkit-tap-highlight-color: transparent; touch-action: manipulation;
@@ -132,7 +132,7 @@
     #lf-chat-bubble::after {
       content: ''; position: absolute; bottom: -7px; right: 20px;
       width: 0; height: 0; border-left: 7px solid transparent;
-      border-right: 4px solid transparent; border-top: 8px solid #f02cb8;
+      border-right: 4px solid transparent; border-top: 8px solid #FF4FA3;
     }
     @keyframes lf-bubble-in { from { opacity: 0; transform: translateY(14px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
     .lf-bubble-out { animation: lf-bubble-out 0.25s ease forwards !important; }

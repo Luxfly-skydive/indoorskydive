@@ -60,7 +60,7 @@
       container.innerHTML = `
         <div style="text-align:center;padding:40px;color:#888;">
           <div style="font-size:36px;margin-bottom:12px;">📅</div>
-          <div>No available slots right now. Please email <a href="mailto:hello@luxfly.eu" style="color:#f02cb8;">hello@luxfly.eu</a> or WhatsApp <strong>+32 2 320 55 09</strong>.</div>
+          <div>No available slots right now. Please email <a href="mailto:hello@luxfly.eu" style="color:#FF4FA3;">hello@luxfly.eu</a> or WhatsApp <strong>+32 2 320 55 09</strong>.</div>
         </div>`;
       return;
     }
@@ -121,7 +121,7 @@
       summary.style.display = 'block';
       summary.innerHTML = `
         <strong>Selected:</strong> ${new Date(date).toLocaleDateString('en-GB',{weekday:'long',day:'2-digit',month:'long',year:'numeric'})} at ${time.slice(0,5)}<br>
-        <span style="color:#f02cb8;">${labels[pkg]}</span> · ${left} spots remaining`;
+        <span style="color:#FF4FA3;">${labels[pkg]}</span> · ${left} spots remaining`;
     }
 
     // Scroll to booking form
